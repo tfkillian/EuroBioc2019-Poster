@@ -1,0 +1,55 @@
+\begin{thebibliography}{1}
+
+\bibitem{meyers2017computational}
+R.~M. Meyers, J.~G. Bryan, J.~M. McFarland, B.~A. Weir, A.~E. Sizemore, H.~Xu,
+  N.~V. Dharia, P.~G. Montgomery, G.~S. Cowley, S.~Pantel, {\em et~al.},
+  ``Computational correction of copy number effect improves specificity of
+  crispr--cas9 essentiality screens in cancer cells,'' {\em Nature genetics},
+  vol.~49, no.~12, p.~1779, 2017.
+
+\bibitem{depmap2019depmap}
+B.~DepMap, ``Depmap achilles 19q3 public,'' {\em FigShare version}, vol.~2,
+  2019.
+
+\bibitem{mcfarland2018improved}
+J.~M. McFarland, Z.~V. Ho, G.~Kugener, J.~M. Dempster, P.~G. Montgomery, J.~G.
+  Bryan, J.~M. Krill-Burger, T.~M. Green, F.~Vazquez, J.~S. Boehm, {\em
+  et~al.}, ``Improved estimation of cancer dependencies from large-scale rnai
+  screens using model-based normalization and data integration,'' {\em Nature
+  communications}, vol.~9, 2018.
+
+\bibitem{ghandi2019next}
+M.~Ghandi, F.~W. Huang, J.~Jan{\'e}-Valbuena, G.~V. Kryukov, C.~C. Lo, E.~R.
+  McDonald, J.~Barretina, E.~T. Gelfand, C.~M. Bielski, H.~Li, {\em et~al.},
+  ``Next-generation characterization of the cancer cell line encyclopedia,''
+  {\em Nature}, vol.~569, no.~7757, p.~503, 2019.
+
+\bibitem{li2019landscape}
+H.~Li, S.~Ning, M.~Ghandi, G.~V. Kryukov, S.~Gopal, A.~Deik, A.~Souza,
+  K.~Pierce, P.~Keskula, D.~Hernandez, {\em et~al.}, ``The landscape of cancer
+  cell line metabolism,'' {\em Nature medicine}, vol.~25, no.~5, p.~850, 2019.
+
+\bibitem{corsello2019non}
+S.~M. Corsello, R.~T. Nagari, R.~D. Spangler, J.~Rossen, M.~Kocak, J.~G. Bryan,
+  R.~Humeidi, D.~Peck, X.~Wu, A.~A. Tang, {\em et~al.}, ``Non-oncology drugs
+  are a source of previously unappreciated anti-cancer activity,'' {\em
+  bioRxiv}, p.~730119, 2019.
+
+\bibitem{dempster2019extracting}
+J.~M. Dempster, J.~Rossen, M.~Kazachkova, J.~Pan, G.~Kugener, D.~E. Root, and
+  A.~Tsherniak, ``Extracting biological insights from the project achilles
+  genome-scale crispr screens in cancer cell lines,'' {\em BioRxiv}, p.~720243,
+  2019.
+
+\bibitem{dunn2019oncogenic}
+S.~Dunn, O.~Lombardi, R.~Lukoszek, and V.~H. Cowling, ``Oncogenic pik3ca
+  mutations increase dependency on the mrna cap methyltransferase, rnmt, in
+  breast cancer cells,'' {\em Open biology}, vol.~9, no.~4, p.~190052, 2019.
+
+\bibitem{tsherniak2017defining}
+A.~Tsherniak, F.~Vazquez, P.~G. Montgomery, B.~A. Weir, G.~Kryukov, G.~S.
+  Cowley, S.~Gill, W.~F. Harrington, S.~Pantel, J.~M. Krill-Burger, {\em
+  et~al.}, ``Defining a cancer dependency map,'' {\em Cell}, vol.~170, no.~3,
+  pp.~564--576, 2017.
+
+\end{thebibliography}

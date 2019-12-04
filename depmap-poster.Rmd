@@ -1,0 +1,315 @@
+---
+title: Exploiting Depmap cancer dependency data using the depmap R package
+author:
+  - name: Theo Killian
+    affil: 1
+  - name: Laurent Gatto
+    affil: 1
+affiliation:
+  - num: 1
+    address: Computational Biology and Bioinformatics, Université Catholique de Louvain
+column_numbers: 3
+logoright_name: ~/tmp/depmap_paper/depmap-poster/logo-institutdeduve-vertical-rgb.png
+logoleft_name: ~/tmp/depmap_paper/depmap-poster/uclouvain_logo.png
+output: 
+  posterdown::posterdown_html:
+    self_contained: false
+bibliography: packages.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Abstract
+
+The `depmap` package facilitates access in the R environment for data from the
+*Depmap* project, which maps genetic and chemical dependencies, and other
+molecular biological features for over 1700 cancer cell lines. The `depmap`
+package formats this data for use of popular R data analysis and visualization
+tools such as `dplyr` and `ggplot2`. In addition, the `depmap` package utilizes
+`ExperimentHub`, storing versions of *Depmap* data accessible from the Cloud,
+providing a reproducible research framework to support exploration of these rich
+datasets.
+
+# Introduction
+
+![](./depmap-logo.png)
+
+Many contemporary cancer drug therapies are broadly toxic to cells. Precision
+cancer medicine, in contrast, aims to avoid such indescriminate toxicity by
+exploiting cancer-specific vulnerabilities. The genomic alterations of cancer
+acting on the molecular landscape of the cell may result in differential
+vulnerabilities, or *dependencies* as compared to healthy cells. However, the
+exact nature of many of these dependencies in cancer cell lines is not
+completely understood. *Depmap*, a collaboration between the *Broad Institute*
+and *Wellcome Sanger Institute*, aims to map such dependencies in a broad range
+cancer cell lines, in the frame of searching for new targets in precision cancer
+medicine.
+
+<!-- As of Dec 2019, the most current *Depmap* release is 2019 Q3, which has mapped -->
+<!-- 1736 human cancer cell lines for dependencies. CRISPR and RNAi were utilized in -->
+<!-- mapping genomic dependencies via gene knockout and gene knockdown, respectively. -->
+<!-- Measurements of chemical dependencies were also performed on 578 cancer cell -->
+<!-- lines for 4,518 compounds. The *Depmap* project has also compiled other -->
+<!-- molecular biological characterization of cancer cell lines, including as genomic -->
+<!-- copy number, Reverse Phase Protein Array data, TPM gene expression data for -->
+<!-- protein coding genes and metadata containing mutation calls. These datasets are -->
+<!-- updated on a quarterly release schedule and are publically available under -->
+<!-- *CC BY 4.0* licence. -->
+
+<!-- The `depmap` package was designed to facilitate access in the R environment and -->
+<!-- serve as a platform for reproducible research for data from the *Depmap* -->
+<!-- project. The use of R affords the use of the diverse library of packages, such -->
+<!-- as the rich grammar of `dplyr` for data manipulation and the declarative, -->
+<!-- customizable graphics of `ggplot2`. In this way, tissue-wise or global -->
+<!-- comparisons, or contrasting select features to produce unique and insightful -->
+<!-- visualizations of the *Depmap* data can be performed. -->
+
+# Use cases
+
+The `depmap` package stores all *Depmap* datasets in the Cloud on AWS. `depmap`
+accessor functions that utilize `ExperimentHub` can be used to retrieve specific
+datasets and import them into the R environment.
+
+```{r load_libraries, message=FALSE, warning=FALSE, echo=FALSE, include=FALSE}
+## load libraries
+library("dplyr")
+library("ggplot2")
+library("viridis")
+library("tibble")
+library("gridExtra")
+library("depmap")
+library("ExperimentHub")
+library("tidyr")
+# library("plotly")
+# library("stringr")
+```
+
+```{r EH, message=FALSE, warning=FALSE, eval=TRUE, echo=FALSE, include=FALSE}
+## create ExperimentHub query object
+eh <- ExperimentHub()
+query(eh, "depmap")
+
+# download specific depmap rnai dependency dataset
+rnai <- eh[["EH3080"]]
+crispr <- eh[["EH3081"]]
+copyNumber <- eh[["EH3082"]]
+TPM <- eh[["EH3084"]]
+mutationCalls <- eh[["EH3085"]]
+metadata <- eh[["EH3086"]]
+# RPPA <- eh[["EH3083"]]
+# drug_sensitivity <- eh[["EH3087"]]
+```
+
+```{r EH_text, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE, include=TRUE}
+## automatically download the latest rnai dataset
+rnai <- depmap::depmap_rnai()
+
+## or... download specific depmap rnai dataset
+eh <- ExperimentHub()
+query(eh, "depmap")
+rnai <- eh[["EH3080"]]
+```
+
+A potential target in precision cancer medicine is gene *PIK3CA*. Oncogenic
+mutations of this gene increase genetic dependency on the mRNA cap
+methyltransferase, *RNMT*, in breast cancer cells [1].
+
+Fig 1. shows the mutation types for gene *PIK3CA*, highlighting if such 
+mutations are deleterious.
+
+```{r fig.height=6, fig.width=14, message=FALSE, warning=FALSE, echo=FALSE}
+# p3 <- mutationCalls %>%
+#                   dplyr::select(depmap_id, gene_name, var_class) %>%
+#                   filter(gene_name == "PIK3CA") %>%
+#                   left_join(metadata, by = "depmap_id") %>%
+#                   ggplot(aes(x=factor(var_class), fill = primary_disease)) +
+#                   geom_bar(stat="Count", width=0.7) +
+#                   xlab("mutation type") + theme_minimal() +
+#                   ggtitle("Mutation Types for PIK3CA")
+# p3 <- (p3 + coord_flip() + theme_gray())
+
+p4 <- mutationCalls %>%
+                  dplyr::select(depmap_id, gene_name, var_class, is_deleterious) %>%
+                  filter(gene_name == "PIK3CA") %>%
+                  left_join(metadata, by = "depmap_id") %>%
+                  ggplot(aes(x=factor(var_class), fill = is_deleterious)) +
+                  geom_bar(stat="Count", width=0.7) +
+                  xlab("mutation type") + theme_minimal() +
+                  ggtitle("Deleteriousness of Mutation Types for PIK3CA")
+p4 <- (p4 + coord_flip() + theme_gray())
+p4
+# grid.arrange(p3, p4, nrow=1)
+```
+
+Fig 2. shows the histograms of CRISPR and dependency scores for gene *PIK3CA*, 
+displaying the dependency distributions whether the mutation of that gene is
+deleterious.
+
+```{r fig.height=6, fig.width=14, message=FALSE, warning=FALSE, echo=FALSE}
+del1 <- rnai %>% dplyr::select(depmap_id, gene, gene_name, dependency) %>% 
+         filter(gene_name == "PIK3CA") %>% 
+         left_join((mutationCalls %>% select(depmap_id, entrez_id, is_deleterious)), by = c("depmap_id")) %>%
+         left_join((TPM %>% select(depmap_id, gene, expression)), by = c("depmap_id", "gene")) %>%
+         filter(expression > 1)
+
+p5 <- del1 %>%  ggplot(aes(x=dependency)) +
+         geom_histogram(data=subset(del1, is_deleterious == TRUE), fill = "red", binwidth=0.03, alpha = 0.2) +
+         geom_histogram(data=subset(del1, is_deleterious == FALSE), fill = "blue", binwidth=0.03, alpha = 0.2) +
+         geom_vline(xintercept=mean(rnai$dependency, na.rm = TRUE), linetype = "dotted", color = "red") +
+         ggtitle("Histogram of RNAi dependency scores for gene PIK3CA by deleteriousness")
+
+del2 <- crispr %>% dplyr::select(depmap_id, gene, gene_name, dependency) %>% 
+         filter(gene_name == "PIK3CA") %>% 
+         left_join((mutationCalls %>% select(depmap_id, entrez_id, is_deleterious)), by = c("depmap_id")) %>%
+         left_join((TPM %>% select(depmap_id, gene, expression)), by = c("depmap_id", "gene")) %>%
+         filter(expression > 1)
+
+p6 <- del2 %>%  ggplot(aes(x=dependency)) +
+         geom_histogram(data=subset(del2, is_deleterious == TRUE), fill = "red", binwidth=0.03, alpha = 0.2) +
+         geom_histogram(data=subset(del2, is_deleterious == FALSE),fill = "blue", binwidth=0.03, alpha = 0.2) +
+         geom_vline(xintercept=mean(crispr$dependency, na.rm = TRUE), linetype = "dotted", color = "red") +
+         ggtitle("Histogram of CRISPR dependency scores for gene PIK3CA by deleteriousness")
+
+grid.arrange(p5, p6, nrow=1, top = "Distribution of Dependency Scores for CRISPR and RNAI assays")
+```
+
+Fig 3. shows the histograms of CRISPR and dependency scores for gene *PIK3CA*, 
+displaying the dependency distributions whether the mutation of that gene is
+deleterious.
+
+```{r fig.height=6, fig.width=14, message=FALSE, warning=FALSE, echo=FALSE}
+rnai_pik3ca <- rnai %>%
+      select(depmap_id, gene, gene_name, dependency) %>%
+      filter(gene_name == "PIK3CA") %>%
+      left_join((TPM %>% select(depmap_id, gene, expression)), by = c("depmap_id", "gene")) %>%
+      left_join((metadata %>% select(depmap_id, primary_disease)), by = "depmap_id")
+
+p7 <- rnai_pik3ca %>%  ggplot(aes(x=dependency, y=expression)) +
+      geom_point(size=0.7, alpha = 0.7) +
+      geom_point(data = subset(rnai_pik3ca, primary_disease == "Breast Cancer"),
+                 color = "red", size=0.8, alpha = 0.8) +
+      ggtitle("Scatterplot of expression values for gene PIK3CA")
+
+crispr_pik3ca <- crispr %>%
+      select(depmap_id, gene, gene_name, dependency) %>%
+      filter(gene_name == "PIK3CA") %>%
+      left_join((TPM %>% select(depmap_id, gene, expression)), by = c("depmap_id", "gene")) %>%
+      left_join((metadata %>% select(depmap_id, primary_disease)), by = "depmap_id")
+
+p8 <- crispr_pik3ca %>%  ggplot(aes(x=dependency, y=expression)) +
+      geom_point(size=0.7, alpha = 0.7) +
+      geom_point(data = subset(crispr_pik3ca, primary_disease == "Breast Cancer"),
+                 color = "red", size=0.8, alpha = 0.8) +
+      ggtitle("Scatterplot of expression values for gene PIK3CA")
+
+grid.arrange(p7, p8, nrow=1, top = "Distribution of Dependency Scores for CRISPR and RNAI assays")
+```
+
+The plot below illustrates the distribution of RNAi-derived dependency scores
+for gene *PIK3CA* for every major type of cancer, while highlighting the nature
+of individual mutations of this gene for different types of cancer diseases. 
+Dependency scores for 
+
+```{r fig.height=6, fig.width=14, message=FALSE, warning=FALSE, echo=FALSE}
+#library("plotly")
+meta_rnai <- metadata %>%
+  select(depmap_id, lineage) %>%
+  full_join(rnai, by = "depmap_id") %>%
+  filter(gene_name == "PIK3CA") %>%
+  left_join((mutationCalls %>% select(depmap_id, entrez_id, is_cosmic_hotspot, var_annotation)),
+             by = c("depmap_id", "entrez_id"))
+
+p1 <- meta_rnai %>% ggplot(aes(x=dependency, y=lineage)) +
+  geom_point(alpha = 0.4, size = 0.5) +
+  geom_point(data = subset(meta_rnai, var_annotation == "damaging"), color = "red") +
+  geom_point(data = subset(meta_rnai, var_annotation == "other non-conserving"), color = "blue") +
+  geom_point(data = subset(meta_rnai, var_annotation == "other conserving"), color = "cyan") +
+  geom_point(data = subset(meta_rnai, is_cosmic_hotspot == TRUE), color = "orange") +
+  geom_vline(xintercept=mean(meta_rnai$dependency, na.rm = TRUE), linetype = "dotted", color = "red") +
+  ggtitle("Scatterplot of dependency scores for gene PIK3CA by lineage")
+#ggplotly(p1)
+p1
+```
+
+The plot below shows the transcript expression levels for gene *PIK3CA* across
+all major cancer types.
+
+```{r fig.height=6, fig.width=14, message=FALSE, warning=FALSE, echo=FALSE}
+p2 <- metadata %>%
+      select(depmap_id, lineage) %>%
+      full_join(TPM, by = "depmap_id") %>%
+      filter(gene_name == "PIK3CA") %>%
+      ggplot(aes(x=lineage, y=expression, fill = lineage)) +
+      geom_boxplot(outlier.alpha = 0.1) +
+      ggtitle("Boxplot of expression values for gene PIK3CA by lineage")
+p2 <- p2 + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+      theme(legend.position = "none")
+# # ggplotly(p2)
+p2
+```
+
+The plot below shows the log copy number for gene *PIK3CA* across all major
+cancer types.
+
+```{r}
+p9 <- metadata %>%
+      select(depmap_id, lineage) %>%
+      full_join(copyNumber, by = "depmap_id") %>%
+      filter(gene_name == "PIK3CA") %>%
+      ggplot(aes(x=lineage, y=log_copy_number, fill = lineage)) +
+      geom_boxplot(outlier.alpha = 0.1) +
+      ggtitle("Boxplot of log copy number for gene PIK3CA by lineage")
+p9 <- p9 + theme(axis.text.x = element_text(angle = 45))
+```
+
+# Discussion and Outlook
+
+The `depmap` R package will continue to be maintained in line with biannual
+Bioconductor releases, in addition to incorporating quarterly releases of
+*Depmap* data. Feedback and questions from the community are most welcome and
+contributions to the code are highly appreciated. The `depmap` R package is
+available through Bioconductor (v.3.10).
+
+```{r, include=FALSE}
+knitr::write_bib(c('knitr','rmarkdown','posterdown','pagedown'), 'packages.bib')
+```
+
+# Acknowledgements
+
+I would like to thank the *De Duve Institute* for granting funding to complete
+this project.
+
+# References
+<font size="5">
+1. Tsherniak, Aviad, et al. "Defining a cancer dependency map." Cell 170.3 (2017):
+564-576. 
+</font> <br/>
+<font size="5">
+2. Depmap, A Cancer Dependency Map to systematically identify genetic and
+pharmacologic dependencies and the biomarkers that predict them. 2019. Retrieved
+from https://depmap.org/portal/download/
+</font> <br/>
+<font size="5">
+3. McFarland, J. M., Ho, Z. V., Kugener, G., Dempster, J. M., Montgomery, P. G.,
+Bryan, J. G., ... & Golub, T. R. (2018). Improved estimation of cancer
+dependencies from large-scale RNAi screens using model-based normalization and
+data integration. Nature communications, 9.
+</font> <br/>
+<font size="5">
+4. Meyers, R. M., Bryan, J. G., McFarland, J. M., Weir, B. A., Sizemore, A. E.,
+Xu, H., ... & Goodale, A. (2017). Computational correction of copy number effect
+improves specificity of CRISPR–Cas9 essentiality screens in cancer cells. Nature
+genetics, 49(12), 1779.
+</font> <br/>
+<font size="5">
+5. Dunn, Sianadh, et al. "Oncogenic PIK3CA mutations increase dependency on the
+mRNA cap methyltransferase, RNMT, in breast cancer cells." Open biology 9.4
+(2019): 190052.
+</font> <br/>
+<font size="5">
+6. Dempster, Joshua M., et al. "Extracting Biological Insights from the Project
+Achilles Genome-Scale CRISPR Screens in Cancer Cell Lines." BioRxiv (2019):
+720243.
+</font> <br/>
