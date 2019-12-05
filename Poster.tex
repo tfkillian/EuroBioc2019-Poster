@@ -128,25 +128,12 @@
 
 \setlength{\columnsep}{1cm}
 \begin{multicols}{2}
-
-
-\noindent
-\begin{minipage}[t]{\linewidth}
-  \vspace{-0.35cm}
-
-  \begin{center}
-  \includegraphics[width=0.65\textwidth]{figs/depmap-logo.png}
-  \end{center}
-  \vspace{-0.55cm}
-
-\end{minipage}
-
 \noindent
 \fcolorbox{yellow}{yellow}{
   \begin{minipage}[t]{\linewidth}
       \vspace{.15cm}
-      \section*{\huge Summary} % \cite{Specht2019-jm} % how to cite
-      \large The \hcode[yellow]{depmap} package facilitates access in the R environment for data from the \textit{Depmap} project, which maps genetic and chemical dependencies, and other molecular   biological features for over 1700 cancer cell lines. The \hcode[yellow]{depmap} package formats this data for use of popular R data analysis and visualization tools such as \hcode[yellow]{dplyr} and \hcode[yellow]{ggplot2}. In addition, the \hcode[yellow]{depmap} package utilizes \hcode[yellow]{ExperimentHub}, storing versions of \textit{Depmap} data accessible from the Cloud, providing a reproducible research framework for these datasets.
+      \section*{\huge Summary}
+      \large The \hcode[yellow]{depmap} package facilitates access in the R environment for data from the \textit{Depmap} project, which maps genetic and chemical dependencies, and other molecular biological features for over 1700 cancer cell lines. The \hcode[yellow]{depmap} package formats this data for use of popular R data analysis and visualization tools such as \hcode[yellow]{dplyr} and \hcode[yellow]{ggplot2}. In addition, the \hcode[yellow]{depmap} package utilizes \hcode[yellow]{ExperimentHub}, storing versions of \textit{Depmap} data accessible from the cloud.
   \end{minipage}
 }
 \noindent
@@ -155,7 +142,14 @@
 % Introduction
 \noindent
 \begin{minipage}[t]{\linewidth}
-  \vspace{0.55cm}
+
+  \vspace{-0.70cm}
+
+  \begin{center}
+  \includegraphics[width=0.65\textwidth]{figs/depmap-logo.png}
+  \end{center}
+   \vspace{-1.3cm}
+  % \vspace{0.55cm}
   \section*{\huge Introduction}
   \large Many contemporary cancer drug therapies are broadly toxic to cells. Precision cancer medicine, aims to avoid indescriminate toxicity by exploiting cancer-specific vulnerabilities, termed \textit{dependencies}. However, the exact nature of many of these dependencies in cancer cell lines is not completely understood. The \textit{Depmap} project, a collaboration between the Broad Institute and Wellcome Sanger Institute, maps such dependencies in a broad range cancer cell lines, in the frame of searching for new targets in precision cancer medicine.
 \end{minipage}
@@ -164,10 +158,10 @@
 % Content of the package
 \noindent
 \begin{minipage}[t]{\linewidth}
-  \vspace{0.55cm}
+ % \vspace{-2cm}
   \section*{\huge Content of the package}
-  \large The \hcode{depmap} package stores all \textit{Depmap} datasets \nocite{meyers2017computational} in the Cloud on AWS. \hcode{depmap} accessor functions, such as \hcode{depmap\_rnai()} that utilize \hcode{ExperimentHub} can be used to retrieve the most current datasets and import them into the R environment. It is also possible to download datasets of specific releases via the \hcode{EH} ID number. \textbf{Help files} with documentation are also provided for every data set.
-    \vspace{0.4cm}
+  \large The \hcode{depmap} package stores all \textit{Depmap} datasets \nocite{meyers2017computational} in the cloud on AWS, via \hcode{ExperimentHub} (\hcode{EH}). \hcode{depmap} accessor functions, such as \hcode{depmap\_rnai()} can be used to retrieve the most current datasets and import them into R. It is also possible to download datasets of specific releases via the \hcode{EH} ID number. \textbf{Help files} with documentation are also provided for every data set.
+    \vspace{0.5cm}
     \begin{lstlisting}
   ## automatically download the latest rnai dataset
   rnai <- depmap::depmap_rnai()
@@ -180,27 +174,28 @@
   ## obtain documentation on depmap rnai dataset
   ?rnai
   \end{lstlisting}
-    \vspace{0.4cm}
+    \vspace{0.5cm}
   \large A table of the available datasets is shown below:
   
   \scriptsize
-  \begin{tabular}{@{\extracolsep{5pt}} cl}
-  \vspace{0.4cm}
+  \resizebox{\textwidth}{!}{
+  \begin{tabular}{@{\extracolsep{15pt}} cl}
+  \vspace{0.5cm}
     \\[-1.8ex]\hline
     \hline \\[-1.8ex]
     \textbf{Dataset} & \textbf{Name} \\
     \hline \\[-1.8ex]
-    crispr & CRISPR (Avana) Genetic Dependency (Depmap, Broad 2019) \\
-    rnai & RNAi (Broad, Novartis, Marcotte) Genetic Dependency (McFarland, et al. 2018) \\
+    crispr & CRISPR Genetic Dependency (Depmap, Broad 2019) \\
+    rnai & RNAi Genetic Dependency (McFarland, et al. 2018) \\
     copyNumber & Gene Level Copy Number (Depmap, Broad 2019) \\
     TPM & TPM Gene Expression (Depmap, Broad 2019) \\
     RPPA & Reverse Phase Protein Array (Ghandi, et al. 2019) \\
     mutationCalls & CCLE Mutation Data (Depmap, Broad 2019) \\
     metadata & Cancer Cell Line Metadata (Depmap, Broad 2019) \\
-    drug\_dependency & PRISM Chemical Dependency Screens (Corsello, et al. 2019) \\
+    drug\_dependency & PRISM Chemical Dependency (Corsello, et al. 2019) \\
     \hline \\[-1.8ex]
     \vspace{0.25cm}
-  \end{tabular}
+  \end{tabular}}
   
 % ---------------------------------------------------------------------------
 % Use Cases
@@ -213,33 +208,40 @@
 \end{minipage}
 
 % ---------------------------------------------------------------------------
+% Discussion and Outlook
+\vspace{0.4cm}
+\noindent
+\colorbox{yellow}{
+  \begin{minipage}[t]{0.965\linewidth}
+    \vspace{0.15cm}
+    \section*{\huge Discussion and Outlook}
+    \large 
+    We hope that this package will serve as a reproducible research framework allowing researchers to easily mine, explore and illustrate dependency data taken from the \textit{Depmap} project. The \hcode{depmap} R package will be maintained in line with biannual \textit{Bioconductor} releases, in addition to incorporating quarterly releases of \textit{Depmap} data. Feedback and questions from the community and contributions to the code are highly appreciated.
+  \end{minipage}
+}
+
+% ---------------------------------------------------------------------------
 % Use Cases
 \noindent
 \begin{minipage}[t]{\linewidth}
   \vspace{0.55cm}
   \subsection*{}
-  
-  % \begin{center}
-  % \includegraphics[width=0.5\textwidth]{figs/delete.png}
-  % \end{center}
-  % \vspace{-0.5cm}
-  % \captionof{figure}{\textbf{Mutation types for PIK3CA for all major cancer types.} \small Deleteriousness of mutation is highlighted.}
-  % \label{fig:mutation}
-  
+  % plot 1
   \begin{center}
   \includegraphics[width=0.95\textwidth]{figs/new_dep.png}
   \end{center}
   \vspace{-0.5cm}
   \captionof{figure}{\textbf{Distribution of RNAi dependency scores for gene PIK3CA by lineage.} \small Types of mutations are highlighted: "damaging" (red), "other non-conserving" (blue), "is COSMIC hotspot" (orange), mean RNAi dependency scores for gene PIK3CA (dotted red line).}
   \label{fig:dep_table}
-  
+    \vspace{0.4cm}
+  % plot 2
   \begin{center}
   \includegraphics[width=0.95\textwidth]{figs/new_exp.png}
   \end{center}
   \vspace{-0.5cm}
   \captionof{figure}{\textbf{Distribution of gene expression values for gene PIK3CA by lineage.} \small Log2+1 fold expression values for all major cancer diseases. Outliers shown in gray.}
   \label{fig:exp_table}
-
+  %
 \nocite{depmap2019depmap}
 \nocite{meyers2017computational}
 \nocite{mcfarland2018improved}
@@ -250,32 +252,19 @@
 \nocite{dunn2019oncogenic}
 \nocite{tsherniak2017defining}
 
-\end{minipage}
-
-% ---------------------------------------------------------------------------
-% Discussion and Outlook
-\vspace{.4cm}
-\noindent
-\colorbox{yellow}{
-  \begin{minipage}[t]{0.965\linewidth}
-    \vspace{.15cm}
-    \section*{\huge Discussion and Outlook}
-    \large 
-    We hope that this package will allow researchers to more easily mine, explore and visually illustrate dependency data taken from the \textit{Depmap} project. The \hcode{depmap} R package will continue to be maintained in line with biannual \textit{Bioconductor} releases, in addition to incorporating quarterly releases of \textit{Depmap} data. Feedback and questions from the community are most welcome and contributions to the code are highly appreciated.
-  \end{minipage}
-}
 % 
 % Package Availability
-\noindent
-\begin{minipage}[t]{\linewidth}
-\vspace{0.4cm}
+% \noindent
+% \begin{minipage}[t]{\linewidth}
+\vspace{0.3cm}
   \subsection*{Package Availability}
   \large
-  The \hcode{depmap} package is available through \textit{Bioconductor} (v.3.10) and can be installed in the following manner:
+  The \hcode{depmap} package is available through \textit{Bioconductor} (since v.3.8) and can be installed in the following manner:
   \begin{lstlisting}
   BiocManager::install("depmap")
   library("depmap")
   \end{lstlisting}
+    \vspace{0.3cm}
 \end{minipage}
 
 % ---------------------------------------------------------------------------
