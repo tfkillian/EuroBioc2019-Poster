@@ -137,11 +137,11 @@
 % Introduction
 \noindent
 \begin{minipage}[t]{\linewidth}
-  \vspace{-0.50cm}
+  \vspace{-1.0cm}
   \begin{center}
   \includegraphics[width=0.65\textwidth]{figs/depmap-logo.png}
   \end{center}
-   \vspace{-1.25cm}
+   \vspace{-1.0cm}
   \section*{\huge Introduction}
   \large Many contemporary cancer drug therapies are broadly toxic to cells. Precision cancer medicine, aims to avoid indescriminate toxicity by exploiting cancer-specific vulnerabilities, termed \textit{dependencies}. However, the exact nature of many of these dependencies in cancer cell lines is not completely understood. The \textit{Depmap} project, a collaboration between the Broad Institute and Wellcome Sanger Institute, maps such dependencies in a broad range cancer cell lines, in the frame of searching for new targets in precision cancer medicine.
 \end{minipage}
@@ -150,6 +150,7 @@
 % Content of the package
 \noindent
 \begin{minipage}[t]{\linewidth}
+  \vspace{-1.0cm}
   \section*{\huge Content of the package}
   \large The \hcode{depmap} package stores all \textit{Depmap} datasets \nocite{meyers2017computational} in the cloud on AWS, via \hcode{ExperimentHub} (\hcode{EH}). \hcode{depmap} accessor functions, such as \hcode{depmap\_rnai()} can be used to retrieve the most current datasets and import them into R. It is also possible to download datasets of specific releases via the \hcode{EH} ID number. \textbf{Help files} with documentation are also provided for every data set.
     \vspace{0.5cm}
@@ -168,7 +169,7 @@
   \end{lstlisting}
   %
     \vspace{0.5cm}
-  \large A table of the available datasets is shown below:
+  \large A table of the available datasets is shown below: \\
   \scriptsize
   \resizebox{\textwidth}{!}{
   \begin{tabular}{@{\extracolsep{15pt}} cl}
@@ -213,7 +214,7 @@
 % Use Cases
 \noindent
 \begin{minipage}[t]{\linewidth}
-  \vspace{0.55cm}
+  \vspace{0.4cm}
   \subsection*{}
   % plot 1
   \begin{center}
@@ -222,7 +223,7 @@
   \vspace{-0.5cm}
   \captionof{figure}{\textbf{Distribution of RNAi dependency scores for gene PIK3CA by lineage.} \small Types of mutations are highlighted: "damaging" (red), "other non-conserving" (blue), "is COSMIC hotspot" (orange), mean RNAi dependency scores for gene PIK3CA (dotted red line).}
   \label{fig:dep_table}
-    \vspace{0.4cm}
+    \vspace{0.25cm}
   % plot 2
   \begin{center}
   \includegraphics[width=0.95\textwidth]{figs/new_exp.png}
@@ -241,11 +242,9 @@
 \nocite{dunn2019oncogenic}
 \nocite{tsherniak2017defining}
 
-% 
+% -------------------------------------------------------------------------
 % Package Availability
-% \noindent
-% \begin{minipage}[t]{\linewidth}
-\vspace{0.3cm}
+% \vspace{0.15cm}
   \subsection*{Package Availability}
   \large
   The \hcode{depmap} package is available through \textit{Bioconductor} (since v.3.8) and can be installed in the following manner:
@@ -253,7 +252,13 @@
   BiocManager::install("depmap")
   library("depmap")
   \end{lstlisting}
-    \vspace{0.3cm}
+    % \vspace{0.15cm}
+% -------------------------------------------------------------------------
+% Acknowledgements
+  \subsection*{Acknowledgements}
+  \large
+I would like to thank the De Duve Institute for granting funding to complete this project.
+\vspace{0.15cm}
 \end{minipage}
 
 % ---------------------------------------------------------------------------
