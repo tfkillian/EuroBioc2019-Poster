@@ -85,14 +85,10 @@
 \title{}
 \author{}
 \date{}
-
 \begin{document}
-
 
 % ---------------------------------------------------------------------------
 % Banner
-
-
 \begin{center}
 \colorbox{lgray}{
   \begin{minipage}{3cm}
@@ -122,7 +118,6 @@
 }
 \end{center}
 
-
 % ---------------------------------------------------------------------------
 % Summary
 
@@ -142,14 +137,11 @@
 % Introduction
 \noindent
 \begin{minipage}[t]{\linewidth}
-
   \vspace{-0.50cm}
-
   \begin{center}
   \includegraphics[width=0.65\textwidth]{figs/depmap-logo.png}
   \end{center}
    \vspace{-1.25cm}
-  % \vspace{0.55cm}
   \section*{\huge Introduction}
   \large Many contemporary cancer drug therapies are broadly toxic to cells. Precision cancer medicine, aims to avoid indescriminate toxicity by exploiting cancer-specific vulnerabilities, termed \textit{dependencies}. However, the exact nature of many of these dependencies in cancer cell lines is not completely understood. The \textit{Depmap} project, a collaboration between the Broad Institute and Wellcome Sanger Institute, maps such dependencies in a broad range cancer cell lines, in the frame of searching for new targets in precision cancer medicine.
 \end{minipage}
@@ -158,10 +150,10 @@
 % Content of the package
 \noindent
 \begin{minipage}[t]{\linewidth}
- % \vspace{-2cm}
   \section*{\huge Content of the package}
   \large The \hcode{depmap} package stores all \textit{Depmap} datasets \nocite{meyers2017computational} in the cloud on AWS, via \hcode{ExperimentHub} (\hcode{EH}). \hcode{depmap} accessor functions, such as \hcode{depmap\_rnai()} can be used to retrieve the most current datasets and import them into R. It is also possible to download datasets of specific releases via the \hcode{EH} ID number. \textbf{Help files} with documentation are also provided for every data set.
     \vspace{0.5cm}
+    %
     \begin{lstlisting}
   ## automatically download the latest rnai dataset
   rnai <- depmap::depmap_rnai()
@@ -174,9 +166,9 @@
   ## obtain documentation on depmap rnai dataset
   ?rnai
   \end{lstlisting}
+  %
     \vspace{0.5cm}
   \large A table of the available datasets is shown below:
-  
   \scriptsize
   \resizebox{\textwidth}{!}{
   \begin{tabular}{@{\extracolsep{15pt}} cl}
@@ -199,12 +191,9 @@
   
 % ---------------------------------------------------------------------------
 % Use Cases
-  
   \subsection*{\huge Use Case}
   \large
-  A potential target in precision cancer medicine is gene \textit{PIK3CA}. Oncogenic mutations of this gene increase dependency on the mRNA cap methyltransferase, \textit{RNMT}, in breast cancer cells. 
-  A plot of the dependency scores for all cancer cell lines shows increased genetic dependency for this gene for breast cancer cell lines and that these mutations frequently appear in the COSMIC database. (Figure \ref{fig:dep_table}).  The expression levels of this gene for all cancer cell lines are also illustrated (Figure \ref{fig:exp_table})
-
+  A potential target in precision cancer medicine is gene \textit{PIK3CA}. Oncogenic mutations of this gene increase dependency on the mRNA cap methyltransferase, \textit{RNMT}, in breast cancer cells. A plot of the dependency scores for all cancer cell lines shows increased genetic dependency for this gene for breast cancer cell lines and that these mutations frequently appear in the COSMIC database. (Figure \ref{fig:dep_table}). The expression levels of this gene for all cancer cell lines are also illustrated (Figure \ref{fig:exp_table})
 \end{minipage}
 
 % ---------------------------------------------------------------------------
